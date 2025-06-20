@@ -1,10 +1,10 @@
 import 'package:expenz_flutter/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-class SharedOnboardingButton extends StatelessWidget {
+class CustomButton extends StatelessWidget {
   final String title;
   final Color bgColor;
-  const SharedOnboardingButton({super.key, required this.title, required this.bgColor});
+  const CustomButton({super.key, required this.title, required this.bgColor});
 
   @override
   Widget build(BuildContext context) {

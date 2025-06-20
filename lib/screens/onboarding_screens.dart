@@ -3,7 +3,7 @@ import 'package:expenz_flutter/data/onboarding_page_data.dart';
 import 'package:expenz_flutter/screens/onboardings/first_page.dart';
 import 'package:expenz_flutter/screens/user_data_page.dart';
 import 'package:expenz_flutter/widgets/onboarding_widgets/onboarding_page_card.dart';
-import 'package:expenz_flutter/widgets/shared/shared_onboarding_button.dart';
+import 'package:expenz_flutter/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -90,7 +90,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                                 curve: Curves.easeIn,
                               );
                             },
-                            child: SharedOnboardingButton(
+                            child: CustomButton(
                               title: isShowEnd ? "Get Start" : "Next",
                               bgColor: mainColor,
                             ),
@@ -105,7 +105,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                                 ),
                               );
                             },
-                            child: SharedOnboardingButton(
+                            child: CustomButton(
                               title: isShowEnd ? "Get Start" : "Next",
                               bgColor: mainColor,
                             ),

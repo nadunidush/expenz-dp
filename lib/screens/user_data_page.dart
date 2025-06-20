@@ -1,3 +1,6 @@
+import 'package:expenz_flutter/constants/colors.dart';
+import 'package:expenz_flutter/widgets/shared/custom_button.dart';
+import 'package:expenz_flutter/widgets/user_data_widgets/user_form_card.dart';
 import 'package:flutter/material.dart';
 
 class UserDataPage extends StatefulWidget {
@@ -8,11 +11,152 @@ class UserDataPage extends StatefulWidget {
 }
 
 class _UserDataPageState extends State<UserDataPage> {
+  //remember me bool value
+  bool _rememberMe = false;
+
+  //form key
+  final _formKey = GlobalKey<FormState>();
+
+  //controllers for all fields
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("User Data"),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                Text(
+                  "Enter your\nPersonal Details",
+                  style: TextStyle(
+                    fontSize: 33,
+                    color: blackColor,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 30),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      //Name field
+                      UserFormCard(
+                        hintText: "Name",
+                        controller: _nameController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter your name";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 20),
+
+                      //Email field
+                      UserFormCard(
+                        hintText: "Email",
+                        controller: _emailController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter your email";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 20),
+
+                      //password field
+                      UserFormCard(
+                        hintText: "Password",
+                        icon: Icons.remove_red_eye_outlined,
+                        secure: true,
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter valid password";
+                          }
+                        },
+                      ),
+                      SizedBox(height: 20),
+
+                      //confirma password field
+                      UserFormCard(
+                        hintText: "Confirm password",
+                        icon: Icons.remove_red_eye_outlined,
+                        secure: true,
+                        controller: _confirmPasswordController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return "Please enter same password";
+                          }
+                        },
+                      ),
+
+                      SizedBox(height: 20),
+                      //remember me for next time
+                      Row(
+                        children: [
+                          Text(
+                            "Remember me for the next time",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: greyColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+
+                          Expanded(
+                            child: CheckboxListTile(
+                              activeColor: mainColor,
+                              value: _rememberMe,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (!_rememberMe) {
+                                    _rememberMe = true;
+                                  } else {
+                                    _rememberMe = false;
+                                  }
+                                  print(_rememberMe);
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      SizedBox(height: 40),
+                      //Next buttom
+                      GestureDetector(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            String name = _nameController.text;
+                          }
+                        },
+                        child: CustomButton(title: "Next", bgColor: mainColor),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
