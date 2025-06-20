@@ -1,4 +1,6 @@
 import 'package:expenz_flutter/constants/colors.dart';
+import 'package:expenz_flutter/screens/main_screen.dart';
+import 'package:expenz_flutter/services/user_data_services.dart';
 import 'package:expenz_flutter/widgets/shared/custom_button.dart';
 import 'package:expenz_flutter/widgets/user_data_widgets/user_form_card.dart';
 import 'package:flutter/material.dart';
@@ -18,19 +20,18 @@ class _UserDataPageState extends State<UserDataPage> {
   final _formKey = GlobalKey<FormState>();
 
   //controllers for all fields
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -65,6 +66,7 @@ class _UserDataPageState extends State<UserDataPage> {
                           if (value!.isEmpty) {
                             return "Please enter your name";
                           }
+                          return null;
                         },
                       ),
                       SizedBox(height: 20),
@@ -77,6 +79,7 @@ class _UserDataPageState extends State<UserDataPage> {
                           if (value!.isEmpty) {
                             return "Please enter your email";
                           }
+                          return null;
                         },
                       ),
                       SizedBox(height: 20),
@@ -91,6 +94,7 @@ class _UserDataPageState extends State<UserDataPage> {
                           if (value!.isEmpty) {
                             return "Please enter valid password";
                           }
+                          return null;
                         },
                       ),
                       SizedBox(height: 20),
@@ -105,6 +109,7 @@ class _UserDataPageState extends State<UserDataPage> {
                           if (value!.isEmpty) {
                             return "Please enter same password";
                           }
+                          return null;
                         },
                       ),
 
@@ -127,12 +132,9 @@ class _UserDataPageState extends State<UserDataPage> {
                               value: _rememberMe,
                               onChanged: (value) {
                                 setState(() {
-                                  if (!_rememberMe) {
-                                    _rememberMe = true;
-                                  } else {
-                                    _rememberMe = false;
-                                  }
-                                  print(_rememberMe);
+                                  if (_rememberMe) {
+                                    _rememberMe != value;
+                                  } 
                                 });
                               },
                             ),
@@ -143,9 +145,31 @@ class _UserDataPageState extends State<UserDataPage> {
                       SizedBox(height: 40),
                       //Next buttom
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             String name = _nameController.text;
+                            String email = _emailController.text;
+                            String password = _passwordController.text;
+                            String confirmPassword =
+                                _confirmPasswordController.text;
+
+                            await UserDataServices.storeUserDetails(
+                              userName: name,
+                              userEmail: email,
+                              password: password,
+                              confirmPassword: confirmPassword,
+                              context: context,
+                            );
+
+                            //Navigate to the main screen
+                            if (context.mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainScreen(),
+                                ),
+                              );
+                            }
                           }
                         },
                         child: CustomButton(title: "Next", bgColor: mainColor),
