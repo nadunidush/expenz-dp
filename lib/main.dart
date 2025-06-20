@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:expenz_flutter/screens/onboarding_screens.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -13,13 +15,7 @@ class MyApp extends StatelessWidget {
       title: "Expenze",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: "Inter"),
-      home: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Text("Hello Expenze", style: TextStyle(fontSize: 18)),
-          ),
-        ),
-      ),
+      home: OnboardingScreens(),
     );
   }
 }
