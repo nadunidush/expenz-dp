@@ -21,10 +21,11 @@ class UserDataServices {
       }
       //After matching passwords then store the username and email.
       SharedPreferences prefex = await SharedPreferences.getInstance();
-      prefex.setString("username", userName);
-      prefex.setString("useremail", userEmail);
+      await prefex.setString("username", userName);
+      await prefex.setString("useremail", userEmail);
 
       ScaffoldMessenger.of(
+        // ignore: use_build_context_synchronously
         context,
       ).showSnackBar(SnackBar(content: Text("User details store sucessfully")));
     } catch (e) {
@@ -33,10 +34,18 @@ class UserDataServices {
   }
 
   //method or function for check username for rendering the page accordinglty.
-
   static Future<bool> checkUsername() async {
     SharedPreferences prefix = await SharedPreferences.getInstance();
     String? username = prefix.getString('username');
     return username != null;
+  }
+
+  //get the username and email
+  static Future<Map<String, String>> getUserNameAndEmail() async {
+    SharedPreferences prefers = await SharedPreferences.getInstance();
+    String? username = prefers.getString("username");
+    String? email = prefers.getString("useremail");
+
+    return {"username":username!,"useremail" :email!};
   }
 }

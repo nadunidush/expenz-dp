@@ -14,7 +14,7 @@ class UserDataPage extends StatefulWidget {
 
 class _UserDataPageState extends State<UserDataPage> {
   //remember me bool value
-  bool _rememberMe = false;
+  final bool _rememberMe = false;
 
   //form key
   final _formKey = GlobalKey<FormState>();
@@ -160,16 +160,13 @@ class _UserDataPageState extends State<UserDataPage> {
                               confirmPassword: confirmPassword,
                               context: context,
                             );
-
                             //Navigate to the main screen
-                            if (context.mounted) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => MainScreen(),
                                 ),
                               );
-                            }
                           }
                         },
                         child: CustomButton(title: "Next", bgColor: mainColor),
