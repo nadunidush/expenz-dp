@@ -23,7 +23,7 @@ final Map<ExpenseCategories, Color> expensesCategoryColors = {
 };
 
 class ExpenseModel {
-  final String id;
+  final int id;
   final String title;
   final String description;
   final double amount;
@@ -40,4 +40,30 @@ class ExpenseModel {
     required this.date,
     required this.time,
   });
+
+  //Expense object conver to the JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'amount': amount,
+      'category': categories.index,
+      'date': date.toIso8601String(),
+      'time': time.toIso8601String(),
+    };
+  }
+
+  //JSON conver to the dart object(expense)
+  factory ExpenseModel.fromJson(Map<String, dynamic> json) {
+    return ExpenseModel(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      amount: json['amount'],
+      categories: ExpenseCategories.values[json['category']],
+      date: DateTime.parse(json['date']),
+      time: DateTime.parse(json['time']),
+    );
+  }
 }

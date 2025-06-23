@@ -39,4 +39,30 @@ class IncomeModel {
     required this.date,
     required this.time,
   });
+
+  //income convert to json object
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'amount': amount,
+      'category': categories.index,
+      'date': date.toIso8601String(),
+      'time': time.toIso8601String(),
+    };
+  }
+
+  //json convert to Dart object (income)
+  factory IncomeModel.fromJson(Map<String, dynamic> json) {
+    return IncomeModel(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      amount: json['amount'],
+      categories: IncomeCategories.values[json['category']],
+      date: DateTime.parse(json['date']),
+      time: DateTime.parse(json['time']),
+    );
+  }
 }
