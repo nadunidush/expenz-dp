@@ -1,12 +1,20 @@
 import 'package:expenz_flutter/constants/colors.dart';
 import 'package:expenz_flutter/models/expense_model.dart';
 import 'package:expenz_flutter/models/income_model.dart';
+import 'package:expenz_flutter/services/expense_service.dart';
+import 'package:expenz_flutter/services/income_service.dart';
 import 'package:expenz_flutter/widgets/shared/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddNewPage extends StatefulWidget {
-  const AddNewPage({super.key});
+  final Function(ExpenseModel) addExpenses;
+  final Function(IncomeModel) addNewIncomes;
+  const AddNewPage({
+    super.key,
+    required this.addExpenses,
+    required this.addNewIncomes,
+  });
 
   @override
   State<AddNewPage> createState() => _AddNewPageState();
@@ -401,9 +409,63 @@ class _AddNewPageState extends State<AddNewPage> {
                         ),
 
                         SizedBox(height: 20),
-                        CustomButton(
-                          title: "Add",
-                          bgColor: _selectedIndex == 0 ? redColor : greenColor,
+
+                        //submit button
+                        GestureDetector(
+                          onTap: () async {
+                            if (_selectedIndex == 0) {
+                              List<ExpenseModel> loadExpenses =
+                                  await ExpenseService().loadExpenses();
+                              print("Expense: ${loadExpenses.length}");
+                              //Expense add from button
+                              ExpenseModel expense = ExpenseModel(
+                                id: loadExpenses.length + 1,
+                                title: _titleController.text,
+                                description: _descriptionController.text,
+                                amount: _amountController.text.isEmpty
+                                    ? 0
+                                    : double.parse(_amountController.text),
+                                categories: _expenseCategories,
+                                date: _selectedDate,
+                                time: _selectTime,
+                              );
+                              widget.addExpenses(expense);
+
+                              //clear fields
+                              _titleController.clear();
+                              _descriptionController.clear();
+                              _amountController.clear();
+                            } else {
+                              List<IncomeModel> loadIncomes =
+                                  await IncomeService().loadIncomes();
+                              print("Income: ${loadIncomes.length}");
+
+                              //income add from button
+                              IncomeModel income = IncomeModel(
+                                id: loadIncomes.length + 1,
+                                title: _titleController.text,
+                                description: _descriptionController.text,
+                                amount: _amountController.text.isEmpty
+                                    ? 0
+                                    : double.parse(_amountController.text),
+                                categories: _incomeCategories,
+                                date: _selectedDate,
+                                time: _selectTime,
+                              );
+                              widget.addNewIncomes(income);
+
+                              //clear all fields
+                              _titleController.clear();
+                              _descriptionController.clear();
+                              _amountController.clear();
+                            }
+                          },
+                          child: CustomButton(
+                            title: "Add",
+                            bgColor: _selectedIndex == 0
+                                ? redColor
+                                : greenColor,
+                          ),
                         ),
                       ],
                     ),

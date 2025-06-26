@@ -22,7 +22,7 @@ final Map<IncomeCategories, Color> incomeCategoryColors = {
 
 //Model of Income
 class IncomeModel {
-  final String id;
+  final int id;
   final String title;
   final String description;
   final double amount;

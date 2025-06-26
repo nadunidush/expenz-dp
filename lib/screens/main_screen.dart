@@ -1,10 +1,14 @@
+import 'package:expenz_flutter/models/income_model.dart';
+import 'package:expenz_flutter/services/income_service.dart';
+import 'package:flutter/material.dart';
 import 'package:expenz_flutter/constants/colors.dart';
+import 'package:expenz_flutter/models/expense_model.dart';
 import 'package:expenz_flutter/screens/add_new_page.dart';
 import 'package:expenz_flutter/screens/home_page.dart';
 import 'package:expenz_flutter/screens/profile_page.dart';
 import 'package:expenz_flutter/screens/report_page.dart';
 import 'package:expenz_flutter/screens/transactions_page.dart';
-import 'package:flutter/material.dart';
+import 'package:expenz_flutter/services/expense_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -15,15 +19,66 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 2;
-  final List<Widget> screens = [
-    HomePage(),
-    TransactionsPage(),
-    AddNewPage(),
-    BudgetPage(),
-    ProfilePage(),
-  ];
+
+  //create list for added expense
+  List<ExpenseModel> expenseList = [];
+
+  //create list for added incomes
+  List<IncomeModel> incomeList = [];
+
+  //fetch expenses
+  void fetchAllExpenses() async {
+    List<ExpenseModel> loadExpses = await ExpenseService().loadExpenses();
+    setState(() {
+      expenseList = loadExpses;
+      print(expenseList.length);
+    });
+  }
+
+  //save expense in shared preference
+  void addNewExpense(ExpenseModel newExpses) {
+    ExpenseService().saveExpense(newExpses, context);
+    //update expense list
+    setState(() {
+      expenseList.add(newExpses);
+    });
+  }
+
+  //fetch incomes
+  void fetchAllIncomes() async {
+    List<IncomeModel> loadIncomes = await IncomeService().loadIncomes();
+    setState(() {
+      incomeList = loadIncomes;
+      print(incomeList.length);
+    });
+  }
+
+  //save income in shared preferenses
+  void addNewIncome(IncomeModel income) async {
+    IncomeService().saveIncome(income, context);
+    setState(() {
+      incomeList.add(income);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      fetchAllExpenses();
+      fetchAllIncomes();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      HomePage(),
+      TransactionsPage(),
+      AddNewPage(addExpenses: addNewExpense, addNewIncomes: addNewIncome),
+      BudgetPage(),
+      ProfilePage(),
+    ];
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
