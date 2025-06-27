@@ -60,4 +60,36 @@ class ExpenseService {
 
     return loadExpense;
   }
+
+  //delete the expense from shared preferences
+  Future<void> removeExpense(int id, BuildContext context) async {
+    try {
+      SharedPreferences prefes = await SharedPreferences.getInstance();
+      List<String>? exsistingExpenses = prefes.getStringList(_expenseKey);
+
+      //conver dart object for exsistingExpenses in shared preferences
+      List<ExpenseModel> exsistingExpenseObject = [];
+      if (exsistingExpenses != null) {
+        exsistingExpenseObject = exsistingExpenses
+            .map((e) => ExpenseModel.fromJson(json.decode(e)))
+            .toList();
+      }
+
+      //delete the specific expense from dart object (id)
+      exsistingExpenseObject.removeWhere((expense) => expense.id == id);
+
+      //convert exsistingExpenseObject to save Shared Preferences
+      List<String>? updatedExpenseList = exsistingExpenseObject
+          .map((e) => json.encode(e.toJson()))
+          .toList();
+      await prefes.setStringList(_expenseKey, updatedExpenseList);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Remove Expense succuessfully")));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+    }
+  }
 }

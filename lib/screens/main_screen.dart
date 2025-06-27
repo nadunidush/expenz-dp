@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 2;
+  int _currentIndex = 1;
 
   //create list for added expense
   List<ExpenseModel> expenseList = [];
@@ -61,6 +61,22 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  //remove expense from shared preferences
+  void removeExpense(ExpenseModel expense) async {
+    ExpenseService().removeExpense(expense.id, context);
+    setState(() {
+      expenseList.remove(expense);
+    });
+  }
+
+  //remove income from shared preferences
+  void removeIncomes(IncomeModel income) async {
+    IncomeService().removeIncome(income.id, context);
+    setState(() {
+      incomeList.remove(income);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +90,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       HomePage(),
-      TransactionsPage(),
+      TransactionsPage(
+        expenseList: expenseList,
+        incomeList: incomeList,
+        removeExpense: removeExpense,
+        removeIncome: removeIncomes,
+      ),
       AddNewPage(addExpenses: addNewExpense, addNewIncomes: addNewIncome),
       BudgetPage(),
       ProfilePage(),
