@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:expenz_flutter/models/expense_model.dart';
 import 'package:expenz_flutter/models/income_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

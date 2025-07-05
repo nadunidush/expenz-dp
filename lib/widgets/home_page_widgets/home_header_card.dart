@@ -1,10 +1,23 @@
 import 'package:expenz_flutter/constants/colors.dart';
+import 'package:expenz_flutter/models/expense_model.dart';
+import 'package:expenz_flutter/models/income_model.dart';
 import 'package:expenz_flutter/widgets/home_page_widgets/income_expense_small_card.dart';
 import 'package:flutter/material.dart';
 
 class HomeHeaderCard extends StatefulWidget {
+  final List<ExpenseModel> expensesList;
+  final List<IncomeModel> incomeList;
+  final double totalExpensesAmount;
+  final double totalIncomesAmount;
   final String username;
-  const HomeHeaderCard({super.key, required this.username});
+  const HomeHeaderCard({
+    super.key,
+    required this.username,
+    required this.expensesList,
+    required this.incomeList,
+    required this.totalExpensesAmount,
+    required this.totalIncomesAmount,
+  });
 
   @override
   State<HomeHeaderCard> createState() => _HomeHeaderCardState();
@@ -61,13 +74,13 @@ class _HomeHeaderCardState extends State<HomeHeaderCard> {
                 bgColor: greenColor,
                 image: "assets/images/income.png",
                 title: "Income",
-                value: 5000,
+                value: widget.totalIncomesAmount,
               ),
               IncomeExpenseSmallCard(
                 bgColor: redColor,
                 image: "assets/images/expense.png",
                 title: "Expense",
-                value: 1200,
+                value: widget.totalExpensesAmount,
               ),
             ],
           ),

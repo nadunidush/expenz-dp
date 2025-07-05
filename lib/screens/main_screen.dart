@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   //create list for added expense
   List<ExpenseModel> expenseList = [];
@@ -31,7 +31,6 @@ class _MainScreenState extends State<MainScreen> {
     List<ExpenseModel> loadExpses = await ExpenseService().loadExpenses();
     setState(() {
       expenseList = loadExpses;
-      print(expenseList.length);
     });
   }
 
@@ -49,7 +48,6 @@ class _MainScreenState extends State<MainScreen> {
     List<IncomeModel> loadIncomes = await IncomeService().loadIncomes();
     setState(() {
       incomeList = loadIncomes;
-      print(incomeList.length);
     });
   }
 
@@ -74,6 +72,7 @@ class _MainScreenState extends State<MainScreen> {
     IncomeService().removeIncome(income.id, context);
     setState(() {
       incomeList.remove(income);
+      print(incomeList);
     });
   }
 
@@ -89,7 +88,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> screens = [
-      HomePage(),
+      HomePage(expensesList: expenseList, incomeList: incomeList,),
       TransactionsPage(
         expenseList: expenseList,
         incomeList: incomeList,

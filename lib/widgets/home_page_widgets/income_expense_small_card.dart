@@ -5,8 +5,14 @@ class IncomeExpenseSmallCard extends StatefulWidget {
   final Color bgColor;
   final String image;
   final String title;
-  final int value;
-  const IncomeExpenseSmallCard({super.key, required this.bgColor, required this.image, required this.title, required this.value});
+  final double value;
+  const IncomeExpenseSmallCard({
+    super.key,
+    required this.bgColor,
+    required this.image,
+    required this.title,
+    required this.value,
+  });
 
   @override
   State<IncomeExpenseSmallCard> createState() => _IncomeExpenseSmallCardState();
@@ -34,7 +40,7 @@ class _IncomeExpenseSmallCardState extends State<IncomeExpenseSmallCard> {
             child: Image.asset(widget.image, width: 50),
           ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 widget.title,
@@ -45,9 +51,9 @@ class _IncomeExpenseSmallCardState extends State<IncomeExpenseSmallCard> {
                 ),
               ),
               Text(
-                "\$${widget.value}",
+                "\$${widget.value.toStringAsFixed(2)}",
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 14,
                   fontWeight: FontWeight.w700,
                   color: whiteColor,
                 ),
