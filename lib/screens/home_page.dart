@@ -5,7 +5,6 @@ import 'package:expenz_flutter/models/income_model.dart';
 import 'package:expenz_flutter/services/user_data_services.dart';
 import 'package:expenz_flutter/widgets/home_page_widgets/line_sample_chart.dart';
 import 'package:expenz_flutter/widgets/transaction_page_widgets/expense_card.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:expenz_flutter/widgets/home_page_widgets/home_header_card.dart';
 
@@ -42,7 +41,7 @@ class _HomePageState extends State<HomePage> {
         totalExpenseAmount += widget.expensesList[i].amount;
       }
 
-      for(var i=0; i < widget.incomeList.length; i++){
+      for (var i = 0; i < widget.incomeList.length; i++) {
         totalIncomeAmount += widget.incomeList[i].amount;
       }
     });
