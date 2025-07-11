@@ -93,6 +93,19 @@ class ExpenseService {
     }
   }
 
+  //delete all expenses
+  Future<void> deleteAllExpenses(BuildContext context) async {
+    try {
+      SharedPreferences prefes = await SharedPreferences.getInstance();
+      await prefes.remove(_expenseKey);
 
-  
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Delete Expense succuessfully")));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error Deleting Expense")));
+    }
+  }
 }

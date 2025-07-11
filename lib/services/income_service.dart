@@ -86,4 +86,20 @@ class IncomeService {
       ).showSnackBar(SnackBar(content: Text("Error: ${e}")));
     }
   }
+
+  //delete all incomes
+  Future<void> deleteAllIncomes(BuildContext context) async {
+    try {
+      SharedPreferences prefes = await SharedPreferences.getInstance();
+      await prefes.remove(_incomeKey);
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Delete Income succuessfully")));
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: ${e}")));
+    }
+  }
 }

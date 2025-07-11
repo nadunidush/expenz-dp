@@ -21,6 +21,9 @@ class AddNewPage extends StatefulWidget {
 }
 
 class _AddNewPageState extends State<AddNewPage> {
+  //formkey
+  final _formKey = GlobalKey<FormState>();
+
   //date changer
   DateTime _selectedDate = DateTime.now();
 
@@ -64,7 +67,7 @@ class _AddNewPageState extends State<AddNewPage> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: whiteColor,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(100),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -188,6 +191,7 @@ class _AddNewPageState extends State<AddNewPage> {
                   ),
                 ),
                 child: Form(
+                  key: _formKey,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 10,
@@ -236,6 +240,11 @@ class _AddNewPageState extends State<AddNewPage> {
                         SizedBox(height: 15),
                         TextFormField(
                           controller: _titleController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter title";
+                            }
+                          },
                           decoration: InputDecoration(
                             hintText: "Title",
                             hintStyle: TextStyle(color: greyColor),
@@ -253,6 +262,11 @@ class _AddNewPageState extends State<AddNewPage> {
                         SizedBox(height: 15),
                         TextFormField(
                           controller: _descriptionController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter description";
+                            }
+                          },
                           decoration: InputDecoration(
                             hintText: "Description",
                             hintStyle: TextStyle(color: greyColor),
@@ -270,6 +284,15 @@ class _AddNewPageState extends State<AddNewPage> {
                         SizedBox(height: 15),
                         TextFormField(
                           controller: _amountController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "Please enter amount";
+                            }
+                            double? amount = double.tryParse(value);
+                            if (amount == null || amount <= 0) {
+                              return "Please enter valid amount";
+                            }
+                          },
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: "Amount",
@@ -413,51 +436,53 @@ class _AddNewPageState extends State<AddNewPage> {
                         //submit button
                         GestureDetector(
                           onTap: () async {
-                            if (_selectedIndex == 0) {
-                              List<ExpenseModel> loadExpenses =
-                                  await ExpenseService().loadExpenses();
-                              print("Expense: ${loadExpenses.length}");
-                              //Expense add from button
-                              ExpenseModel expense = ExpenseModel(
-                                id: loadExpenses.length + 1,
-                                title: _titleController.text,
-                                description: _descriptionController.text,
-                                amount: _amountController.text.isEmpty
-                                    ? 0
-                                    : double.parse(_amountController.text),
-                                categories: _expenseCategories,
-                                date: _selectedDate,
-                                time: _selectTime,
-                              );
-                              widget.addExpenses(expense);
+                            if (_formKey.currentState!.validate()) {
+                              if (_selectedIndex == 0) {
+                                List<ExpenseModel> loadExpenses =
+                                    await ExpenseService().loadExpenses();
+                                print("Expense: ${loadExpenses.length}");
+                                //Expense add from button
+                                ExpenseModel expense = ExpenseModel(
+                                  id: loadExpenses.length + 1,
+                                  title: _titleController.text,
+                                  description: _descriptionController.text,
+                                  amount: _amountController.text.isEmpty
+                                      ? 0
+                                      : double.parse(_amountController.text),
+                                  categories: _expenseCategories,
+                                  date: _selectedDate,
+                                  time: _selectTime,
+                                );
+                                widget.addExpenses(expense);
 
-                              //clear fields
-                              _titleController.clear();
-                              _descriptionController.clear();
-                              _amountController.clear();
-                            } else {
-                              List<IncomeModel> loadIncomes =
-                                  await IncomeService().loadIncomes();
-                              print("Income: ${loadIncomes.length}");
+                                //clear fields
+                                _titleController.clear();
+                                _descriptionController.clear();
+                                _amountController.clear();
+                              } else {
+                                List<IncomeModel> loadIncomes =
+                                    await IncomeService().loadIncomes();
+                                print("Income: ${loadIncomes.length}");
 
-                              //income add from button
-                              IncomeModel income = IncomeModel(
-                                id: loadIncomes.length + 1,
-                                title: _titleController.text,
-                                description: _descriptionController.text,
-                                amount: _amountController.text.isEmpty
-                                    ? 0
-                                    : double.parse(_amountController.text),
-                                categories: _incomeCategories,
-                                date: _selectedDate,
-                                time: _selectTime,
-                              );
-                              widget.addNewIncomes(income);
+                                //income add from button
+                                IncomeModel income = IncomeModel(
+                                  id: loadIncomes.length + 1,
+                                  title: _titleController.text,
+                                  description: _descriptionController.text,
+                                  amount: _amountController.text.isEmpty
+                                      ? 0
+                                      : double.parse(_amountController.text),
+                                  categories: _incomeCategories,
+                                  date: _selectedDate,
+                                  time: _selectTime,
+                                );
+                                widget.addNewIncomes(income);
 
-                              //clear all fields
-                              _titleController.clear();
-                              _descriptionController.clear();
-                              _amountController.clear();
+                                //clear all fields
+                                _titleController.clear();
+                                _descriptionController.clear();
+                                _amountController.clear();
+                              }
                             }
                           },
                           child: CustomButton(

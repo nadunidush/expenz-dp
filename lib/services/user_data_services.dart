@@ -46,6 +46,13 @@ class UserDataServices {
     String? username = prefers.getString("username");
     String? email = prefers.getString("useremail");
 
-    return {"username":username!,"useremail" :email!};
+    return {"username": username!, "useremail": email!};
+  }
+
+  //remove user all details
+  static Future<void> removeUserDetails() async {
+    SharedPreferences prefes = await SharedPreferences.getInstance();
+    await prefes.remove("username");
+    await prefes.remove("useremail");
   }
 }
